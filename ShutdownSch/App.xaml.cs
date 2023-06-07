@@ -1,4 +1,6 @@
-﻿namespace ShutdownSch;
+﻿using Microsoft.Win32;
+
+namespace ShutdownSch;
 
 public partial class App : Application
 {
@@ -8,4 +10,17 @@ public partial class App : Application
 
 		MainPage = new AppShell();
 	}
+
+    protected override void OnStart()
+    {
+        var appName = "Easy Windows Auto Scheduler";
+        string appPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+
+        using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+        {
+            key.SetValue(appName, appPath);
+        }
+
+        // The rest of your OnStart code...
+    }
 }
