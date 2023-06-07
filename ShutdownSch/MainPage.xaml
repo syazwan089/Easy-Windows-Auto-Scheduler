@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShutdownSch.MainPage" xmlns:vm="clr-namespace:ShutdownSch"
+             >
+    <ContentPage.BindingContext>
+        <vm:MainViewModel/>
+    </ContentPage.BindingContext>
+    
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <Label Text="Select desire time to shutdown" HorizontalTextAlignment="Center" Margin="0,0,0,20"/>
+                <TimePicker  Time="{Binding SelectedTimePicker}" BackgroundColor="Gray" />
+                <Button Text="Set time" Command="{Binding SetButton}"/>
+
+            </StackLayout>
+            <StackLayout Margin="0,15,0,0">
+                <Label Text="Your computer will shutdown at" HorizontalTextAlignment="Center" Margin="0,0,0,0"/>
+                <Label Text="{Binding FormatedTime}" HorizontalTextAlignment="Center" Margin="0,20,0,20" TextColor="SkyBlue"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Label Text="Current time : " HorizontalTextAlignment="Center" Margin="0,20,0,20" TextColor="SkyBlue"/>
+                    <Label Text="{Binding CurrentTimeSpan}" HorizontalTextAlignment="Center" Margin="10,20,0,20" TextColor="SkyBlue"/>
+                </StackLayout>
+            </StackLayout>
+        
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
