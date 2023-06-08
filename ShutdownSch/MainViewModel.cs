@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShutdownSch.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -96,6 +97,15 @@ namespace ShutdownSch
             DateTime DateTimeValue = DateTime.Today.Add(currentTime);
             FormatedTime = DateTimeValue.ToString("hh:mm tt");
             CurrentTimeSpan = FormatedTime;
+
+            TimeSpan notification = selectedTime.Subtract(TimeSpan.FromMinutes(10));
+           
+
+            if (notification.Hours == currentTime.Hours && notification.Minutes == notification.Minutes)
+            {
+                NotificationHelper.ShowNotification("Warning!", "Computer will shutdown in 5 minutes", "If you like to cancel, close the application or change the time");
+            }
+
             if (selectedTime.Hours == currentTime.Hours && selectedTime.Minutes == currentTime.Minutes && isCountDown)
             {
                 Task.Run(ExecuteCommand);              
