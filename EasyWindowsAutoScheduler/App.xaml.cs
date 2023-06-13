@@ -9,7 +9,15 @@ public partial class App : Application
 		InitializeComponent();
 
 		MainPage = new AppShell();
-	}
+
+        var appName = "Easy Windows Auto Scheduler";
+        string appPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+
+        using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+        {
+            key.SetValue(appName, appPath);
+        }
+    }
 
 
     protected override Window CreateWindow(IActivationState activationState)
@@ -24,16 +32,5 @@ public partial class App : Application
 
         return window;
     }
-    protected override void OnStart()
-    {
-        var appName = "Easy Windows Auto Scheduler";
-        string appPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-
-        using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
-        {
-            key.SetValue(appName, appPath);
-        }
-
-        // The rest of your OnStart code...
-    }
+  
 }

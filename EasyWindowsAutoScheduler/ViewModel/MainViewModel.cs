@@ -86,7 +86,9 @@ namespace EasyWindowsAutoScheduler.ViewModel
             selectedTime = SelectedTimePicker;
             DateTime DateTimeValue = DateTime.Today.Add(selectedTime);
             FormatedTime = DateTimeValue.ToString("hh:mm tt");
-            PlaySound();
+
+         
+            PlaySound($"Time has been set. Your computer will shutdown at {selectedTime}");
             App.Current.MainPage.DisplayAlert("Time has been set", $"Your computer will shutdown at {selectedTime}", "Close");
         }
 
@@ -107,7 +109,7 @@ namespace EasyWindowsAutoScheduler.ViewModel
             if (notification.Hours == currentTime.Hours && notification.Minutes == notification.Minutes)
             {
                 if(voiceToActivate < 3) 
-                { PlaySound(); voiceToActivate++; }
+                { PlaySound("You computer will shutdown in 5 minutes"); voiceToActivate++; }
                
             }
 
@@ -164,7 +166,7 @@ namespace EasyWindowsAutoScheduler.ViewModel
 
 
 
-        public void PlaySound()
+        public void PlaySound(string txtToVo)
         {
             try
             {
@@ -172,7 +174,7 @@ namespace EasyWindowsAutoScheduler.ViewModel
                 Preferences.Set("SoundFilePath", filePath);
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await TextToSpeech.SpeakAsync("You computer will shutdown in 5 minutes"); // Optional: You can use TextToSpeech to announce the sound playback.                  
+                    await TextToSpeech.SpeakAsync($"{txtToVo}"); // Optional: You can use TextToSpeech to announce the sound playback.                  
                 });
             }
             catch (Exception ex)
