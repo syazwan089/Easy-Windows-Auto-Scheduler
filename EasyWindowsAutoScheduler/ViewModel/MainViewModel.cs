@@ -1,32 +1,36 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace ShutdownSch
+namespace EasyWindowsAutoScheduler.ViewModel
 {
-    internal class MainViewModel : INotifyPropertyChanged
+    class MainViewModel : INotifyPropertyChanged
     {
-
         private bool isCountDown;
-		private TimeSpan timePicker;
+        private TimeSpan timePicker;
 
-		public TimeSpan SelectedTimePicker
-		{
-			get { return timePicker; }
-			set
+        public TimeSpan SelectedTimePicker
+        {
+            get { return timePicker; }
+            set
             {
                 timePicker = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedTimePicker"));
             }
-		}
+        }
 
         private TimeSpan spanTime;
 
         public TimeSpan selectedTime
         {
             get { return spanTime; }
-            set { spanTime = value;
+            set
+            {
+                spanTime = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("selectedTime"));
             }
         }
@@ -49,7 +53,9 @@ namespace ShutdownSch
         public string FormatedTime
         {
             get { return formatedTime; }
-            set { formatedTime = value;
+            set
+            {
+                formatedTime = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FormatedTime"));
             }
         }
@@ -57,7 +63,7 @@ namespace ShutdownSch
 
 
         public Command SetButton { get; set; }
-
+        int voiceToActivate = 0;
 
         public MainViewModel()
         {
@@ -65,8 +71,8 @@ namespace ShutdownSch
             SelectedTimePicker = new TimeSpan(18, 00, 00);
             DateTime DateTimeValue = DateTime.Today.Add(SelectedTimePicker);
             FormatedTime = DateTimeValue.ToString("hh:mm tt");
-          
-           
+            voiceToActivate = 0;
+
             SetButton = new Command(setTime);
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 1000; // 1 second
@@ -86,26 +92,28 @@ namespace ShutdownSch
 
         public TimeSpan SelectedTime { get; set; }
 
- 
+
 
         private void CheckTime()
         {
             TimeSpan currentTime = DateTime.Now.TimeOfDay;
             DateTime DateTimeValue = DateTime.Today.Add(currentTime);
-            FormatedTime = DateTimeValue.ToString("hh:mm tt");
-            CurrentTimeSpan = FormatedTime;
+            string FormatedTime2 = DateTimeValue.ToString("hh:mm tt");
+            CurrentTimeSpan = FormatedTime2;
 
-            TimeSpan notification = selectedTime.Subtract(TimeSpan.FromMinutes(10));
+            TimeSpan notification = selectedTime.Subtract(TimeSpan.FromMinutes(5));
            
 
             if (notification.Hours == currentTime.Hours && notification.Minutes == notification.Minutes)
             {
-                PlaySound();
+                if(voiceToActivate < 3) 
+                { PlaySound(); voiceToActivate++; }
+               
             }
 
             if (selectedTime.Hours == currentTime.Hours && selectedTime.Minutes == currentTime.Minutes && isCountDown)
             {
-                Task.Run(ExecuteCommand);              
+                Task.Run(ExecuteCommand);
                 isCountDown = false;
             }
 
@@ -173,4 +181,7 @@ namespace ShutdownSch
             }
         }
     }
+
+
 }
+
